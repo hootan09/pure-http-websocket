@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>pure http web socket test</title>
+</head>
+<body>
+    <h1>pure nodejs websocket</h1>
+    <div id="box"></div>
+
+    <input id="typeit" type="text"> <button id="sendit">send message</button>
+    <div id="messages"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        
+        var socket = io.connect("/");
+
+        socket.on("connect" , ()=>{
+            console.log('coonected to server');
+        });
+
+        socket.on("disconnect" , () =>{
+            console.log('disconnected from server');
+        })
+
+        //get random number from server
+        socket.on("random" , msg => {
+            document.getElementById("box").innerHTML = '<h2>from server get random: </h2>' + msg;
+            // console.log(msg);
+        })
+
+        socket.on("messages" , msg => {
+            document.getElementById("messages").innerHTML += 'from server get message: ' + msg;
+            // console.log(msg);
+        })
+
+        //send message via html to other
+        document.getElementById("sendit").addEventListener('click' , function(evt){
+            var msg = document.getElementById("typeit").value;
+            if(msg){
+                socket.emit("typeit" , msg);
+                document.getElementById("messages").innerHTML += msg +"<br>";
+                document.getElementById("typeit").innerHTML = "";
+            }
+        })
+    </script>
+</body>
+</html>
