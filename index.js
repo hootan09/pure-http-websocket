@@ -15,8 +15,16 @@ function HandleRequest(req , res){
             // res.write('<h1>mamad niki</h1>');
             // res.end('hello world');
 
-            var content = fs.readFileSync("./index.html");
-            res.end(content);
+            //var content = fs.readFileSync("./index.html"); //for more performance comment this & use async
+            //res.end(content);
+            fs.readFile("./index.html" , (err, content) =>{
+                if(err){
+                    res.end('error in serving page');
+                }
+                else {
+                    res.end(content);
+                }
+            });
         }
         else{
             res.writeHead(403);
